@@ -31,7 +31,7 @@ The folder structure should be:
 │   ├── re_valentin
 ```
 
-Please change the rai path from `rai-fork` to `rai` in the Makefile in rai-manip/PlanningSubroutines and rai-manip/Manip.
+Please change the rai path from `rai-fork` to `rai` in the Makefile in `rai-manip/PlanningSubroutines` and `rai-manip/Manip`.
 
 Compilation then works with
 ```

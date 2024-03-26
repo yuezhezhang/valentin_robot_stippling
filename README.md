@@ -38,7 +38,7 @@ Compilation then works with
 cd your_folder/valentin_robot_stippling
 make -j8
 ```
-Exucution goes with
+Execution goes with
 ```
 ./x.exe
 ```

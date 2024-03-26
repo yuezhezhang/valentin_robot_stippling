@@ -88,7 +88,9 @@ arr sampleConfigurationForRobot(KOMO &komo, const arr &point,
     // komo.pathConfig.watch(true);
 
     // ensure via sampling as well
+    std::cout << "stippling-hhhhhh" << std::endl;
     const bool res = cp.query(q)->isFeasible;
+    std::cout << "stippling-hhhhhh2" << std::endl;
 
     if (res && komo.getReport(false).get<double>("ineq") < 1. &&
         // komo.getReport(false).get<double>("sos") < 0.5 &&
@@ -2272,8 +2274,10 @@ compute_pick_and_place_positions(rai::Configuration &C,
         // komo.pathConfig.watch(true);
 
         // ensure via sampling as well
+        std::cout << "pick-hhhhhh" << std::endl;
         const bool res1 = cp.query(q0)->isFeasible;
         const bool res2 = cp.query(q1)->isFeasible;
+        std::cout << "pick-hhhhhh2" << std::endl;
 
         if (res1 && res2 && komo.getReport(false).get<double>("ineq") < 1. &&
             komo.getReport(false).get<double>("eq") < 1.) {
@@ -2552,7 +2556,7 @@ int main(int argc, char **argv) {
       "verbosity", 0); // verbosity, does not do anything atm
 
   const bool plan_pick_and_place =
-      rai::getParameter<bool>("pnp", false); // pick and place yes/no
+      rai::getParameter<bool>("pnp", true); // pick and place yes/no
 
   // possible modes:
   // - test
@@ -2560,12 +2564,12 @@ int main(int argc, char **argv) {
   // - show scenario
   // - show saved path
   const rai::String mode =
-      rai::getParameter<rai::String>("mode", "test"); // scenario
+      rai::getParameter<rai::String>("mode", "random_search"); // scenario
   const rai::String stippling_scenario =
-      rai::getParameter<rai::String>("stippling_pts", ""); // scenario
+      rai::getParameter<rai::String>("stippling_pts", "default_grid"); // scenario
 
   const rai::String env =
-      rai::getParameter<rai::String>("env", ""); // environment
+      rai::getParameter<rai::String>("env", "lab"); // environment
 
   std::vector<std::string> robots; // string-prefix for robots
 

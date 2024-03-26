@@ -19,7 +19,7 @@ make runTests      # compile and run the essential tests
 cd ..
 git clone https://github.com/vhartman/rai-robotModels.git
 git clone https://github.com/vhartman/rai-manip.git 
-git clone https://github.com/yuezhezhang/re_valentin.git
+git clone https://github.com/yuezhezhang/valentin_robot_stippling.git
 ```
 
 The folder structure should be:
@@ -28,14 +28,14 @@ The folder structure should be:
 │   ├── rai
 │   ├── rai-robotModels
 │   ├── rai-manip
-│   ├── re_valentin
+│   ├── valentin_robot_stippling
 ```
 
 Please change the rai path from `rai-fork` to `rai` in the Makefile in `rai-manip/PlanningSubroutines` and `rai-manip/Manip`.
 
 Compilation then works with
 ```
-cd your_folder/re_valentin
+cd your_folder/valentin_robot_stippling
 make -j8
 ```
 Exucution goes with

@@ -43,4 +43,10 @@ Execution goes with
 ./x.exe
 ```
 
+# Demos
+
+| Random Search | Greedy Search |
+|---|---|
+<img src="./video/bin_picking/random_search.gif" alt="005" style="zoom: 70%;" /> | <img src="./video/bin_picking/greedy_search.gif" alt="004" style="zoom: 70%;" /> |
+
 

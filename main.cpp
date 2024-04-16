@@ -88,9 +88,7 @@ arr sampleConfigurationForRobot(KOMO &komo, const arr &point,
     // komo.pathConfig.watch(true);
 
     // ensure via sampling as well
-    std::cout << "stippling-hhhhhh" << std::endl;
     const bool res = cp.query(q)->isFeasible;
-    std::cout << "stippling-hhhhhh2" << std::endl;
 
     if (res && komo.getReport(false).get<double>("ineq") < 1. &&
         // komo.getReport(false).get<double>("sos") < 0.5 &&
@@ -1680,7 +1678,8 @@ arr get_robot_pose_at_time(const uint t, const Robot r,
 }
 
 void visualize_plan(rai::Configuration C, const Plan &plan,
-                    const bool save = false) {
+                    const bool save = false, 
+                    const char* save_video_path = "video/") {
   rai::Animation A;
   for (const auto &p : plan) {
     for (const auto path : p.second) {
@@ -1693,6 +1692,10 @@ void visualize_plan(rai::Configuration C, const Plan &plan,
   Vf.setConfiguration(C, "\"Real World\"", false);
 
   const double makespan = get_makespan_from_plan(plan);
+
+  if (save) {
+      rai::system(STRING("mkdir -p " <<save_video_path));
+  }
 
   for (uint t = 0; t < makespan; ++t) {
     // A.setToTime(C, t);
@@ -1742,7 +1745,7 @@ void visualize_plan(rai::Configuration C, const Plan &plan,
     rai::wait(0.01);
 
     if (save) {
-      Vf.savePng();
+      Vf.savePng(save_video_path);
     }
   }
 }
@@ -1873,8 +1876,7 @@ Plan plan_multiple_arms_random_search(rai::Configuration &C,
       if (makespan < best_makespan) {
         best_makespan = makespan;
         best_plan = plan;
-
-        visualize_plan(C, best_plan);
+        break;
       }
     }
   }
@@ -1996,7 +1998,11 @@ Plan plan_multiple_arms_greedy_random_search(
   std::vector<std::pair<TaskSequence, Plan>> cache;
 
   uint iter = 0;
+  bool early_stop = false;
   for (uint i = 0; i < 20000; ++i) {
+    if (early_stop) {
+      break;
+    }
     std::cout << "Generating completely new seq. " << i << std::endl;
     TaskSequence seq;
     // seq = generate_alternating_random_sequence(robots, num_tasks, rtpm);
@@ -2096,13 +2102,17 @@ Plan plan_multiple_arms_greedy_random_search(
           plan = new_plan;
           prev_makespan = makespan;
 
-          visualize_plan(C, plan);
+          // visualize_plan(C, plan, save_video, save_video_path); //!
+          // early_stop = true;
+          // break;
         }
 
         if (makespan < best_makespan) {
           best_makespan = makespan;
           best_plan = plan;
           best_seq = new_seq;
+          early_stop = true;
+          break;
 
           // visualize_plan(C, best_plan);
         }
@@ -2139,7 +2149,7 @@ Plan plan_multiple_arms_greedy_random_search(
   return best_plan;
 }
 
-void plan_multiple_arms_simulated_annealing(
+Plan plan_multiple_arms_simulated_annealing(
     rai::Configuration C, const RobotTaskPoseMap &rtpm,
     const std::map<Robot, arr> &home_poses) {
   // generate random sequence of robot/pt pairs
@@ -2201,12 +2211,15 @@ void plan_multiple_arms_simulated_annealing(
 
       if (makespan < best_makespan) {
         best_makespan = makespan;
+        best_plan = new_plan;
+        break;
       }
     }
 
     best_makespan_at_iteration.push_back(best_makespan);
     computation_time_at_iteration.push_back(i);
   }
+  return best_plan;
 }
 
 RobotTaskPoseMap
@@ -2274,10 +2287,8 @@ compute_pick_and_place_positions(rai::Configuration &C,
         // komo.pathConfig.watch(true);
 
         // ensure via sampling as well
-        std::cout << "pick-hhhhhh" << std::endl;
         const bool res1 = cp.query(q0)->isFeasible;
         const bool res2 = cp.query(q1)->isFeasible;
-        std::cout << "pick-hhhhhh2" << std::endl;
 
         if (res1 && res2 && komo.getReport(false).get<double>("ineq") < 1. &&
             komo.getReport(false).get<double>("eq") < 1.) {
@@ -2553,7 +2564,7 @@ int main(int argc, char **argv) {
   rnd.seed(seed);
 
   const uint verbosity = rai::getParameter<double>(
-      "verbosity", 0); // verbosity, does not do anything atm
+      "verbosity", 1); // verbosity, does not do anything atm
 
   const bool plan_pick_and_place =
       rai::getParameter<bool>("pnp", true); // pick and place yes/no
@@ -2564,9 +2575,9 @@ int main(int argc, char **argv) {
   // - show scenario
   // - show saved path
   const rai::String mode =
-      rai::getParameter<rai::String>("mode", "random_search"); // scenario
+      rai::getParameter<rai::String>("mode", "test"); // scenario greedy_random_search
   const rai::String stippling_scenario =
-      rai::getParameter<rai::String>("stippling_pts", "default_grid"); // scenario
+      rai::getParameter<rai::String>("stippling_pts", "lis_default"); // scenario lis_default four_by_four_grid
 
   const rai::String env =
       rai::getParameter<rai::String>("env", "lab"); // environment
@@ -2618,23 +2629,27 @@ int main(int argc, char **argv) {
   }
 
   // initial test
+  bool save_video = true;
   if (mode == "test") {
     const auto plan = plan_multiple_arms_unsynchronized(
         C, robot_task_pose_mapping, home_poses);
     std::cout << "Makespan: " << get_makespan_from_plan(plan) << std::endl;
-
-    visualize_plan(C, plan);
+    visualize_plan(C, plan, save_video, "video/bin_picking/unsync");
   } else if (mode == "random_search") {
-    // random search
     const auto plan = plan_multiple_arms_random_search(
         C, robot_task_pose_mapping, home_poses);
+    std::cout << "Makespan: " << get_makespan_from_plan(plan) << std::endl;
+    visualize_plan(C, plan, save_video, "video/bin_picking/random_search");
   } else if (mode == "greedy_random_search") {
-    // greedy random search
     const auto plan = plan_multiple_arms_greedy_random_search(
         C, robot_task_pose_mapping, home_poses);
+    std::cout << "Makespan: " << get_makespan_from_plan(plan) << std::endl;
+    visualize_plan(C, plan, save_video, "video/bin_picking/greedy_search");
   } else if (mode == "simulated_annealing") {
-    plan_multiple_arms_simulated_annealing(C, robot_task_pose_mapping,
-                                           home_poses);
+    const auto plan = plan_multiple_arms_simulated_annealing(   
+        C, robot_task_pose_mapping, home_poses);
+    std::cout << "Makespan: " << get_makespan_from_plan(plan) << std::endl;
+    visualize_plan(C, plan, save_video, "video/bin_picking/annealing");
   }
 
   return 0;

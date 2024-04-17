@@ -17,8 +17,8 @@ make -j4 tests bin
 make runTests      # compile and run the essential tests
 
 cd ..
-git clone https://github.com/vhartman/rai-robotModels.git
-git clone https://github.com/vhartman/rai-manip.git 
+git clone https://github.com/yuezhezhang/rai-robotModels.git
+git clone https://github.com/yuezhezhang/rai-manip.git 
 git clone https://github.com/yuezhezhang/valentin_robot_stippling.git
 ```
 

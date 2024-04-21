@@ -94,4 +94,3 @@ void setKomoToAnimation(KOMO &komo, const rai::Configuration &C,
   // komo.pathConfig.ensure_indexedJoints();
   // komo.pathConfig.ensure_q();
 }
-

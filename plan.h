@@ -12,10 +12,9 @@
 #include "util.h"
 #include "env_util.h"
 
+typedef std::string Robot;
 typedef std::vector<arr> TaskPoses;
 typedef std::map<std::string, std::vector<TaskPoses>> RobotTaskPoseMap;
-
-typedef std::string Robot;
 typedef std::pair<Robot, int> robot_task_pair;
 typedef std::vector<robot_task_pair> TaskSequence;
 
@@ -167,6 +166,57 @@ arr get_robot_pose_at_time(const uint t, const Robot r,
   }
 
   return home_poses.at(r);
+}
+
+void drawPts(rai::Configuration C, arr pts, arr color = {0., 0., 0., 1.}) {
+  for (uint i = 0; i < pts.d0; ++i) {
+    const arr pt = {pts[i](0), pts[i](1), 0.075};
+
+    auto *dot = C.addFrame("goal", "table");
+    dot->setShape(rai::ST_sphere, {0.005});
+    dot->setRelativePosition({pts[i](0), pts[i](1), 0.05});
+    dot->setContact(0.);
+    dot->setColor(color);
+  }
+
+  C.gl()->displayCamera().setPosition(0, 0., 3);
+  C.gl()->displayCamera().focusOrigin();
+
+  C.watch(true);
+}
+
+// overloaded for both
+void drawPts(rai::Configuration C, std::map<uint, arr> tmp,
+             arr color = {0., 0., 0., 1.}) {
+  for (auto element : tmp) {
+    uint j = element.first;
+    arr pts = element.second;
+
+    for (uint i = 0; i < pts.d0; ++i) {
+      const arr pt = {pts[i](0), pts[i](1), 0.075};
+
+      auto *dot = C.addFrame("goal", "table");
+      dot->setShape(rai::ST_sphere, {0.01});
+      dot->setRelativePosition({pts[i](0), pts[i](1), 0.05});
+      dot->setContact(0.);
+      dot->setColor({1. * j, 1. * j, 1. * j, 1.});
+    }
+  }
+
+  C.watch(true);
+}
+
+std::map<Robot, arr> get_robot_home_poses(rai::Configuration &C,
+                                          const std::vector<Robot> &robots) {
+  std::map<Robot, arr> poses;
+  for (auto r : robots) {
+    setActive(C, r);
+    poses[r] = C.getJointState();
+
+    // std::cout << poses[r] << std::endl;
+  }
+
+  return poses;
 }
 
 void export_plan(const std::vector<Robot> &robots,

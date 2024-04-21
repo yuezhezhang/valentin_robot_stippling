@@ -113,4 +113,3 @@ void pick_and_place(rai::Configuration &C) {
 
   // C.watch(true);
 }
-

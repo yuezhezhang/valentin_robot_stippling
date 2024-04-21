@@ -203,3 +203,41 @@ std::map<uint, arr> LISlogoMulti() {
   return res;
 }
 
+// Scenario for stippling
+arr get_scenario(const rai::String &str) {
+  // const arr pts = grid(2, 2, 0.4, 0.1);
+  // const arr pts = grid(2, 3, 0.4, 0.1);
+
+  arr pts;
+  if (str == "default_grid") {
+    pts = grid();
+  } else if (str == "four_by_four_grid") {
+    pts = grid(4, 4);
+  } else if (str == "three_by_three_grid") {
+    pts = grid(3, 3);
+  } else if (str == "three_by_two_grid") {
+    pts = grid(3, 2);
+  } else if (str == "spiral") {
+    pts = spiral();
+  } else if (str == "random") {
+    pts = randomPts();
+  } else if (str == "cube") {
+    pts = cube(200);
+  } else if (str == "circles") {
+    pts = circles(0.3, 7);
+  } else if (str == "lis_default") {
+    pts = LISlogo(false);
+  } else if (str == "lis_large") {
+    pts = LISlogo(true);
+  } else if (str == "greedy_counterexample") {
+    pts = greedy_counterexample();
+  } else if (str == "four_robot_test_1") {
+    pts = grid(2, 2, 0.05, 0.05);
+  } else if (str == "four_robot_test_2") {
+    pts = grid(2, 2, 0.7, 0.05);
+  } else {
+    std::cout << "Scenario not found" << std::endl;
+  }
+
+  return pts;
+}

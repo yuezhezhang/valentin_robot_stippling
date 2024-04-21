@@ -1,7 +1,7 @@
 #pragma once
-#include "plan.h"
 #include <KOMO/komo.h>
-#include "path_util.h" // for smoothing and partial_shortcut
+#include "../utils/plan.h"
+#include "../utils/path_util.h" // for smoothing and partial_shortcut
 
 arr plan_with_komo_given_horizon(const rai::Animation &A, rai::Configuration &C,
                                  const arr &q0, const arr &q1, const arr &ts,

@@ -1,7 +1,6 @@
 #pragma once 
-#include "plan.h"
-// #include <Kin/kin.h>
 #include "plan_in_animation.h"
+#include "../utils/plan.h"
 
 FrameL get_robot_frames(rai::Configuration &C, const Robot &robot) {
   FrameL frames;

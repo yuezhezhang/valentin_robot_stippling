@@ -1,7 +1,7 @@
 #pragma once 
-#include "../plan.h"
 #include <KOMO/komo.h>
 #include <PlanningSubroutines/ConfigurationProblem.h>
+#include "../utils/plan.h"
 
 RobotTaskPoseMap
 compute_pick_and_place_positions(rai::Configuration &C,

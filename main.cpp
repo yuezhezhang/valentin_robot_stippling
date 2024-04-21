@@ -36,11 +36,10 @@
 #include "searchers/greedy_random_searcher.h"
 #include "searchers/unsync_searcher.h"
 
-#include "plan.h"
-#include "line.h"
-#include "util.h"
-#include "env_util.h"
-#include "path_util.h"
+#include "utils/plan.h"
+#include "utils/util.h"
+#include "utils/env_util.h"
+#include "utils/path_util.h"
 
 // TODO:
 // - fix loading and visualization of previously computed paths

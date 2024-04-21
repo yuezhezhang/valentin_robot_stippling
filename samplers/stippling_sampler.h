@@ -1,7 +1,7 @@
 #pragma once 
-#include "../plan.h"
 #include <KOMO/komo.h>
 #include <PlanningSubroutines/ConfigurationProblem.h>
+#include "../utils/plan.h"
 
 arr sampleConfigurationForRobot(KOMO &komo, const arr &point,
                                 const std::string &prefix, bool rnd = false,

@@ -1,7 +1,7 @@
 BASE = ../rai
 BASE2 = ../rai-manip
 
-OBJS = main.o line.o
+OBJS = main.o
 
 GL = 1
 OMPL = 0

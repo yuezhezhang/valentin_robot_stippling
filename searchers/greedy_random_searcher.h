@@ -1,7 +1,7 @@
 #pragma once 
 #include "sequencing.h"
 #include "../planners/prioritized_planner.h"
-#include "../plan.h"
+#include "../utils/plan.h"
 
 Plan plan_multiple_arms_greedy_random_search(
     rai::Configuration &C, const RobotTaskPoseMap &rtpm,

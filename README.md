@@ -13,8 +13,8 @@ make -j1 printUbuntuAll    # for your information: what the next step will insta
 make -j1 installUbuntuAll  # calls sudo apt-get install; you can always interrupt
 
 make -j4
-make -j4 tests bin
-make runTests      # compile and run the essential tests
+make -j4 tests bin  # (optional) 
+make runTests      # (optional) compile and run the essential tests
 
 cd ..
 git clone https://github.com/yuezhezhang/rai-robotModels.git

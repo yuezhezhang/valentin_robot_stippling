@@ -8,6 +8,7 @@ mkdir your_folder
 cd your_folder
 
 git clone https://github.com/vhartman/rai.git
+cd rai
 # The following two commands depend on the config.mk -- see below
 make -j1 printUbuntuAll    # for your information: what the next step will install
 make -j1 installUbuntuAll  # calls sudo apt-get install; you can always interrupt

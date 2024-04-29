@@ -13,6 +13,10 @@ cd rai
 make -j1 printUbuntuAll    # for your information: what the next step will install
 make -j1 installUbuntuAll  # calls sudo apt-get install; you can always interrupt
 
+# Install pybind
+sudo apt install --yes python3-dev python3 python3-pip
+python3 -m pip install --user numpy pybind11 pybind11-stubgen
+
 make -j4
 make -j4 tests bin  # (optional) 
 make runTests      # (optional) compile and run the essential tests
@@ -21,6 +25,10 @@ cd ..
 git clone https://github.com/yuezhezhang/rai-robotModels.git
 git clone https://github.com/yuezhezhang/rai-manip.git 
 git clone https://github.com/yuezhezhang/valentin_robot_stippling.git
+
+# Install other dependencies
+sudo apt install libspdlog-dev
+sudo apt install libfmt-dev
 ```
 
 The folder structure should be:
@@ -37,7 +45,7 @@ Please change the rai path from `rai-fork` to `rai` in the Makefile in `rai-mani
 Compilation then works with
 ```
 cd your_folder/valentin_robot_stippling
-make -j8
+make -j4
 ```
 Execution goes with
 ```

@@ -1,6 +1,8 @@
 This repository aims to rerun the tagged code that was used for [Valentin](https://vhartmann.com/)'s paper ["Towards computing low-makespan solutions for multi-arm multi-task planning problems"](https://arxiv.org/abs/2305.17527). A writeup of the content can be found in Valentin's [blog](https://vhartmann.com/low-makespan-tamp/) and the repo that is in active development is [here](https://github.com/vhartman/24-data-gen/tree/master). 
 
 # Installation 
+![sys-vesrion](https://img.shields.io/badge/Ubuntu-20.04-blue)
+
 The code depends on the code of [rai](https://github.com/vhartman/rai), [rai-robotModels](https://github.com/vhartman/rai-robotModels) and [rai-manip](https://github.com/vhartman/rai-manip).
 
 ```

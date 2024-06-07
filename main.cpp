@@ -41,37 +41,22 @@
 #include "utils/env_util.h"
 #include "utils/path_util.h"
 
-// TODO:
-// - fix loading and visualization of previously computed paths
-// - time-rescale path
-// - split main planning subroutine
-// - squeaky wheel planner
-// - enable things that are not only 'go to point', e.g. drawing a line
-// - enable multi-arm cooperation
-// - enable search over sequences with precendence constraints
-// - look into more complex motion planning:
-// -- joint optimization
-// -- constrained sampling based planning
-
 int main(int argc, char **argv) {
   rai::initCmdLine(argc, argv);
   const uint seed = rai::getParameter<double>("seed", 42); // seed
   rnd.seed(seed);
-
   const uint verbosity = rai::getParameter<double>(
       "verbosity", 1); // verbosity, does not do anything atm
-
   const bool plan_pick_and_place =
       rai::getParameter<bool>("pnp", true); // pick and place yes/no
-
+  const bool save_video = 
+      rai::getParameter<bool>("save_video", false);
   const rai::String mode =
       rai::getParameter<rai::String>("mode", "test"); // test, greedy_random_search, show_plan
   const rai::String stippling_scenario =
       rai::getParameter<rai::String>("stippling_pts", "lis_default"); // lis_default, four_by_four_grid, default_grid
-
   const rai::String env =
       rai::getParameter<rai::String>("env", "lab"); // environment
-
   std::vector<std::string> robots; // string-prefix for robots
 
   rai::Configuration C;
@@ -118,8 +103,7 @@ int main(int argc, char **argv) {
     robot_task_pose_mapping = compute_pick_and_place_positions(C, robots);
   }
 
-  // initial test
-  bool save_video = false;
+  // sequence and plan
   if (mode == "test") {
     const auto plan = plan_multiple_arms_unsynchronized(
         C, robot_task_pose_mapping, home_poses);

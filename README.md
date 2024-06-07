@@ -19,6 +19,7 @@ make -j1 installUbuntuAll  # calls sudo apt-get install; you can always interrup
 sudo apt install --yes python3-dev python3 python3-pip
 python3 -m pip install --user numpy pybind11 pybind11-stubgen
 
+# TO AVOID "displayTrajectory" error, comment out lines 59-63 in rai/rai/ry/ry-LGP_Tree.cpp
 make -j4
 make -j4 tests bin  # (optional) 
 make runTests      # (optional) compile and run the essential tests
@@ -51,8 +52,24 @@ make -j4
 ```
 Execution goes with
 ```
-./x.exe
+./x.exe -mode single_arm -save_video false
 ```
+
+To save the video, just specify `-save_video true` in the command line, the ppms will then be saved in the `video` folder.
+
+To transform the saved ppms into an mp4, run in terminal:
+```
+cd video
+ffmpeg -framerate 20 -i filename%04d.ppm -c:v libx264 -crf 25 -vf "scale=400:400,format=yuv420p" -movflags +faststart videoname.mp4
+```
+
+To transform the mp4 into a high-quality gif, run:
+```
+ffmpeg -i videoname.mp4 pngname%04d.png
+gifski -o videoname.gif pngname*.png
+```
+>[!NOTE]
+The default working branch of `rai` is `assembly`, you can switch to branch `changes` for faster computation, but the switch will introduce some unnnecessary outputs of types and frames of the configurations, to disable this, you can comment the lines 44-45 in `rai/rai/Geo/fclInterface.cpp`. These outputs are related to the function `komo.setModel(C, true)` and the variable `FCL` in `rai/config.mk`.
 
 # Demos
 
